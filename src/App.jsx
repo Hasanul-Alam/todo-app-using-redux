@@ -7,18 +7,22 @@ import { IoSunny } from "react-icons/io5";
 import { LuMoon } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import { switchTheme } from "./features/theme/themeSlice";
+import { toggleModal } from "./features/modal/modalSlice";
 
 function App() {
   // All States Are Here
-  const [openModal, setOpenModal] = useState(false);
+  // const [openModal, setOpenModal] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [tasks, setTasks] = useState([]);
   const [filterValue, setFilterValue] = useState("all");
   const [searchText, setSearchTex] = useState("");
 
   // Theme is coming from Redux
-  const theme = useSelector(state => state.theme.value);
+  const theme = useSelector((state) => state.theme.value);
   const dispatch = useDispatch();
+
+  // Modal is coming from Redux
+  const openModal = useSelector((state) => state.modal.value);
 
   useEffect(() => {
     const tasks = JSON.parse(localStorage.getItem("todos"));
@@ -56,11 +60,6 @@ function App() {
   const filterCompleted = (allData) => {
     const filteredItems = allData.filter((todo) => todo.completed === true);
     setTasks(filteredItems);
-  };
-
-  // Toggle Add Task Modal
-  const toggleModal = () => {
-    setOpenModal(!openModal);
   };
 
   // Handle Input Change
@@ -295,7 +294,7 @@ function App() {
         {/* Add Button & Modal*/}
         <div className="fixed bottom-20 right-80 max-md:bottom-10 max-md:right-5">
           <button
-            onClick={toggleModal}
+            onClick={() => dispatch(toggleModal())}
             className="btn btn-primary text-white rounded-full"
           >
             <FaPlus />
@@ -321,7 +320,7 @@ function App() {
                   Enter Task
                 </h3>
                 <button
-                  onClick={toggleModal}
+                  onClick={() => dispatch(toggleModal())}
                   className={`text-gray-500 ${
                     theme === "light"
                       ? "text-black hover:text-gray-700"
@@ -352,7 +351,7 @@ function App() {
                 <div className="flex justify-end space-x-2">
                   <button
                     type="reset"
-                    onClick={toggleModal}
+                    onClick={() => dispatch(toggleModal())}
                     className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700"
                     id="closeModal"
                   >
@@ -360,9 +359,7 @@ function App() {
                   </button>
                   <button
                     type="submit"
-                    onClick={() => {
-                      toggleModal();
-                    }}
+                    onClick={() => dispatch(toggleModal())}
                     className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                   >
                     Add Task
