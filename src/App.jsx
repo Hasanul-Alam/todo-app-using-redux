@@ -5,15 +5,20 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 import { IoSunny } from "react-icons/io5";
 import { LuMoon } from "react-icons/lu";
+import { useDispatch, useSelector } from "react-redux";
+import { switchTheme } from "./features/theme/themeSlice";
 
 function App() {
   // All States Are Here
   const [openModal, setOpenModal] = useState(false);
-  const [theme, setTheme] = useState("light");
   const [inputValue, setInputValue] = useState("");
   const [tasks, setTasks] = useState([]);
   const [filterValue, setFilterValue] = useState("all");
   const [searchText, setSearchTex] = useState("");
+
+  // Theme is coming from Redux
+  const theme = useSelector(state => state.theme.value);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const tasks = JSON.parse(localStorage.getItem("todos"));
@@ -56,13 +61,6 @@ function App() {
   // Toggle Add Task Modal
   const toggleModal = () => {
     setOpenModal(!openModal);
-  };
-
-  // Handle Theme Toggling
-  const toggleTheme = () => {
-    {
-      theme === "light" ? setTheme("dark") : setTheme("light");
-    }
   };
 
   // Handle Input Change
@@ -230,7 +228,7 @@ function App() {
                 type="checkbox"
                 value="synthwave"
                 className="toggle theme-controller"
-                onClick={toggleTheme}
+                onClick={() => dispatch(switchTheme())}
               />
               <LuMoon />
             </label>
